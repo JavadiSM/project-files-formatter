@@ -1,6 +1,7 @@
 # project-files-formatter
 # File Organizer Script  
-
+###important note:
+currently it only works in linux, and it moves every file. this will be changed in future updates
 ![File Organizer](https://via.placeholder.com/800x200.png?text=File+Organizer+Script)  
 
 ## Overview  
@@ -40,5 +41,5 @@ The following file types are supported by default:
 
 1. **Clone the Repository**:  
    ```bash  
-   git clone https://github.com/yourusername/file-organizer.git  
-   cd file-organizer
+   git clone https://github.com/JavadiSM/project-files-formatter
+   cd project-files-formatter
