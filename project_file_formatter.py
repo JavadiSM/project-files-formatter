@@ -1,10 +1,12 @@
 import os
 from typing import Dict
 import json
-
+import shutil
 types_map_places: Dict[str, str]
 with open('data-base.json') as info:
     types_map_places = json.load(info)
+    for key,value in types_map_places.items():
+        types_map_places[key] = value.replace('/',os.sep)
 
 
 def initialize_directories(map: dict) -> None:
@@ -12,6 +14,8 @@ def initialize_directories(map: dict) -> None:
     checking the project folder
     Create directories if they do not exist.
     """
+    if not os.path.exists("res"):
+        os.mkdir("res")
     for directory in map.values():
         try:
             if not os.path.exists(directory):
@@ -27,13 +31,13 @@ def move_file(file_path: str, destination_dir: str) -> None:
     """
 
     try:
-        os.rename(file_path, os.path.join(destination_dir, os.path.basename(file_path)))
+        shutil.move(file_path, os.path.join(destination_dir, os.path.basename(file_path)))  # Use shutil.move  
         print(f"Moved: {file_path} -> {destination_dir}")
     except Exception as e:
         print(f"Failed to move '{file_path}' to '{destination_dir}': {e}")
 
 
-def traverse_directory_tree():
+def traverse_directory_tree() -> None:
     for root, _, files in os.walk("."):
         for file in files:
             file_path = os.path.join(root, file)
@@ -49,7 +53,7 @@ def traverse_directory_tree():
     dir_list: list[str] = os.listdir()
     for file in dir_list:
         if os.path.isfile(file):
-            if file.endswith("project_file_formatter.py") or  file.endswith("data-base.json"):
+            if file.endswith("project_file_formatter.py") or  file.endswith("data-base.json") or file.startswith(".") or file.endswith(".md"):
                 continue
             os.rename(file, f"{types_map_places[file[file.rfind('.'):]]}{file}")
 
@@ -57,19 +61,22 @@ def traverse_directory_tree():
 def clean_unused(map: Dict[str, str]) -> None:  
     """  
     Remove directories that are empty and do not exist in the mapping.  
-    """  
+    """
     for directory in map.values():  
         try:  
             # Check if the directory exists  
             if os.path.exists(directory):  
                 # Check if the directory is empty  
                 if not os.listdir(directory):  
-                    os.rmdir(directory)  # Remove the empty directory  
-                    print(f"Removed empty directory: {directory}")  
+                    os.rmdir(directory)  # Remove the empty directory
             else:  
-                print(f"Directory does not exist: {directory}")  
+                pass 
         except Exception as e:  
             print(f"Examining directory '{directory}' failed unexpectedly: {e}")  
+    if not os.listdir("res"):
+        os.rmdir("res")
+        print("no files in res")
+    print("cleaned succesfully")
 
 
 

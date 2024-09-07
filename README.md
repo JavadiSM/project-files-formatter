@@ -1,7 +1,5 @@
 # project-files-formatter
 # File Organizer Script  
-###important note:
-currently it only works in linux, and it moves every file. this will be changed in future updates
 ![File Organizer](https://via.placeholder.com/800x200.png?text=File+Organizer+Script)  
 
 ## Overview  
