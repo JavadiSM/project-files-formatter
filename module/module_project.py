@@ -2,11 +2,12 @@ import os
 from typing import Dict
 import json
 import shutil
+
 types_map_places: Dict[str, str]
-with open('data-base.json') as info:
+with open("data-base.json") as info:
     types_map_places = json.load(info)
-    for key,value in types_map_places.items():
-        types_map_places[key] = value.replace('/',os.sep)
+    for key, value in types_map_places.items():
+        types_map_places[key] = value.replace("/", os.sep)
 
 
 def initialize_directories(map: dict) -> None:
@@ -31,7 +32,9 @@ def move_file(file_path: str, destination_dir: str) -> None:
     """
 
     try:
-        shutil.move(file_path, os.path.join(destination_dir, os.path.basename(file_path)))  # Use shutil.move  
+        shutil.move(
+            file_path, os.path.join(destination_dir, os.path.basename(file_path))
+        )  # Use shutil.move
         print(f"Moved: {file_path} -> {destination_dir}")
     except Exception as e:
         print(f"Failed to move '{file_path}' to '{destination_dir}': {e}")
@@ -42,7 +45,9 @@ def traverse_directory_tree() -> None:
         for file in files:
             file_path = os.path.join(root, file)
             file_extension = os.path.splitext(file)[1]  # Get the file extension
-            if file_path.endswith("project_file_formatter.py") or  file_path.endswith("data-base.json"):
+            if file_path.endswith("project_file_formatter.py") or file_path.endswith(
+                "data-base.json"
+            ):
                 continue
             # Move the file if its type is in the mapping
             if file_extension in types_map_places:
@@ -53,26 +58,31 @@ def traverse_directory_tree() -> None:
     dir_list: list[str] = os.listdir()
     for file in dir_list:
         if os.path.isfile(file):
-            if file.endswith("project_file_formatter.py") or  file.endswith("data-base.json") or file.startswith(".") or file.endswith(".md"):
+            if (
+                file.endswith("project_file_formatter.py")
+                or file.endswith("data-base.json")
+                or file.startswith(".")
+                or file.endswith(".md")
+            ):
                 continue
             os.rename(file, f"{types_map_places[file[file.rfind('.'):]]}{file}")
 
 
-def clean_unused(map: Dict[str, str]) -> None:  
-    """  
-    Remove directories that are empty and do not exist in the mapping.  
+def clean_unused(map: Dict[str, str]) -> None:
     """
-    for directory in map.values():  
-        try:  
-            # Check if the directory exists  
-            if os.path.exists(directory):  
-                # Check if the directory is empty  
-                if not os.listdir(directory):  
+    Remove directories that are empty and do not exist in the mapping.
+    """
+    for directory in map.values():
+        try:
+            # Check if the directory exists
+            if os.path.exists(directory):
+                # Check if the directory is empty
+                if not os.listdir(directory):
                     os.rmdir(directory)  # Remove the empty directory
-            else:  
-                pass 
-        except Exception as e:  
-            print(f"Examining directory '{directory}' failed unexpectedly: {e}")  
+            else:
+                pass
+        except Exception as e:
+            print(f"Examining directory '{directory}' failed unexpectedly: {e}")
     if not os.listdir("res"):
         os.rmdir("res")
         print("no files in res")
