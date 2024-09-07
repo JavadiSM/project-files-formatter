@@ -77,17 +77,3 @@ def clean_unused(map: Dict[str, str]) -> None:
         os.rmdir("res")
         print("no files in res")
     print("cleaned succesfully")
-
-
-
-def main() -> None:
-    # Create directories if they do not exist
-    initialize_directories(types_map_places)
-    # Traverse the directory tree
-    traverse_directory_tree()  
-    # Clean unused directories
-    clean_unused(types_map_places)
-
-
-if __name__ == "__main__":
-    main()
